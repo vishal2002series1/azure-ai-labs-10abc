@@ -36,6 +36,10 @@ jobs:
   # 2) Build, push, deploy GREEN, gate against GREEN, then promote blue/green.
   build-deploy-promote:
     needs: eval-precheck
+    # Opt-in gate: this job only runs when the repo variable AZURE_ENABLED == 'true'
+    # (set it once you've added the three AZURE_* OIDC secrets — see setup doc §6.2).
+    # Until then the pipeline stays green: the eval gate runs and deploy is skipped.
+    if: ${{ vars.AZURE_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

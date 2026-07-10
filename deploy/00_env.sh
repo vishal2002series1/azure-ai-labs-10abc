@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 # Shared variables for all deploy scripts.  source ./00_env.sh
-# Change these to your own names (ACR name must be globally unique, lowercase).
+# Per-learner values come from a .env file at the repo root (git-ignored) or the
+# environment; the assignments below are only fallback defaults. See .env.example.
 
-export RG="rg-lab10-agent"
-export LOCATION="eastus"
-export ACR="acrlab10vrl"                       # -> acrlab10vrl.azurecr.io
-export ACA_ENV="cae-lab10"                     # Container Apps environment
-export APP="bank-triage-agent"                 # the Container App name
-export IMAGE_REPO="bank-triage-agent"          # repo inside ACR
-export APP_INSIGHTS="appi-lab10"               # reuse an existing one if you have it
+# Load .env from the repo root if present — values there override the defaults below.
+_ENV_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -f "$_ENV_DIR/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$_ENV_DIR/.env"
+  set +a
+fi
+
+# Existing resource group under the learner account — do NOT create it.
+# Set RG in .env (or: export RG=<your-assigned-rg>).  List: az group list -o table
+export RG="${RG:-rg-lab10-agent}"
+export LOCATION="${LOCATION:-eastus}"
+export ACR="${ACR:-acrlab10vrl}"                       # -> ${ACR}.azurecr.io (globally unique, lowercase)
+export ACA_ENV="${ACA_ENV:-cae-lab10}"                 # Container Apps environment
+export APP="${APP:-bank-triage-agent}"                 # the Container App name
+export IMAGE_REPO="${IMAGE_REPO:-bank-triage-agent}"   # repo inside ACR
+export APP_INSIGHTS="${APP_INSIGHTS:-appi-lab10}"      # reuse an existing one if you have it
 
 # Image tag is usually the git sha in CI; default to 'local' for manual runs.
 export TAG="${TAG:-local}"

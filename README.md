@@ -82,10 +82,27 @@ git push -u origin main
 > If the push is rejected with *"refusing to allow an OAuth App to create or update workflow …
 > without `workflow` scope"*, step 3 was skipped — run it and push again.
 
+**CI/CD is opt-in for Azure.** On every push the `eval-precheck` job runs the eval gate. The
+`build-deploy-promote` job only runs when the repo **variable** `AZURE_ENABLED == 'true'` and the
+three OIDC secrets (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) are set —
+otherwise it's skipped and the pipeline stays green. See `Lab10_Azure_Setup_Steps.docx` §6.2 for
+exactly where to add the secrets and the `AZURE_ENABLED` variable.
+
 ## On Azure
 
+**First, set your own values.** Copy the template to `.env` and edit it — do **not** edit
+`deploy/00_env.sh`. `.env` is git-ignored, so your resource-group name and other values stay
+out of the repo. Set `RG` to the **existing** resource group already created under your learner
+account (`az group list -o table`); `00_env.sh` loads `.env` automatically.
+
 ```bash
-source deploy/00_env.sh
+cp .env.example .env
+# then edit .env — at minimum set RG (your existing learner RG) and ACR (globally unique, lowercase)
+$EDITOR .env
+```
+
+```bash
+source deploy/00_env.sh                # loads .env, then falls back to defaults for anything unset
 TAG=$(git rev-parse --short HEAD)
 ./deploy/01_acr_build_push.sh          # Lab 10-A
 ./deploy/02_deploy_containerapp.sh     # Lab 10-B

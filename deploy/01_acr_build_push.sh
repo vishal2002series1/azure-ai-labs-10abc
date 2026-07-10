@@ -5,8 +5,16 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 source deploy/00_env.sh
 
+# Use the existing resource group provisioned under the learner account.
+# We do NOT create it — just verify it exists (fail fast with a clear message).
+az group show --name "$RG" -o none 2>/dev/null || {
+  echo "ERROR: resource group '$RG' not found under the current subscription." >&2
+  echo "       Set RG in deploy/00_env.sh to your assigned learner resource group" >&2
+  echo "       (list them with:  az group list -o table)." >&2
+  exit 1
+}
+
 # Create the registry once (idempotent). Basic tier is fine for the lab.
-az group create --name "$RG" --location "$LOCATION" -o none
 az acr show --name "$ACR" -o none 2>/dev/null || \
   az acr create --name "$ACR" --resource-group "$RG" --sku Basic --admin-enabled true -o none
 
