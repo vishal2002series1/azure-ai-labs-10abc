@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -r app/requirements.txt
+      - run: pip install -r requirements-dev.txt   # runtime deps + httpx (TestClient runs the gate in-process)
       - name: Eval gate (in-process)
         run: python eval/eval_gate.py            # exit!=0 fails the job -> pipeline stops
 
