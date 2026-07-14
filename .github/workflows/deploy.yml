@@ -15,6 +15,7 @@ env:
   APP: bank-triage-agent
   IMAGE_REPO: bank-triage-agent
   ACA_ENV: cae-lab10
+  AGENT_POLICY: policies/policy_v1.json
 
 permissions:
   id-token: write        # for azure/login OIDC
