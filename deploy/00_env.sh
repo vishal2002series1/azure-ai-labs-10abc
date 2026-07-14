@@ -14,9 +14,9 @@ fi
 
 # Existing resource group under the learner account — do NOT create it.
 # Set RG in .env (or: export RG=<your-assigned-rg>).  List: az group list -o table
-export RG="${RG:-rg-lab10-agent}"
+export RG="${RG:rg-azuser7584_mml.local-OXDt3}"
 export LOCATION="${LOCATION:-eastus}"
-export ACR="${ACR:-acrlab10vrl}"                       # -> ${ACR}.azurecr.io (globally unique, lowercase)
+export ACR="${ACR:acrlab10azuser7584}"                       # -> ${ACR}.azurecr.io (globally unique, lowercase)
 export ACA_ENV="${ACA_ENV:-cae-lab10}"                 # Container Apps environment
 export APP="${APP:-bank-triage-agent}"                 # the Container App name
 export IMAGE_REPO="${IMAGE_REPO:-bank-triage-agent}"   # repo inside ACR

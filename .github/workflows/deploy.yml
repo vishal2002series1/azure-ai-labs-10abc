@@ -10,8 +10,8 @@ on:
   workflow_dispatch: {}
 
 env:
-  RG: rg-lab10-agent
-  ACR: acrlab10vrl
+  RG: rg-azuser7584_mml.local-OXDt3
+  ACR: acrlab10azuser7584
   APP: bank-triage-agent
   IMAGE_REPO: bank-triage-agent
   ACA_ENV: cae-lab10
